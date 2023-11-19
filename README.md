@@ -2,8 +2,8 @@
 Stalker represents a sophisticated tool utilized in the realm of Open Source Intelligence (OSINT). Its primary function is to facilitate the gathering of comprehensive information about individuals.
 
 ## Example
-![StalkerExampleDark](./images/-hdark#gh-dark-mode-only)
-![StalkerExampleLight](./images/-hlight#gh-light-mode-only)
+![StalkerExampleDark](./images/-hdark.png#gh-dark-mode-only)
+![StalkerExampleLight](./images/-hlight.png#gh-light-mode-only)
 
 ## Installation
 Firstly, clone the GitHub repository to your local machine.
