@@ -1,0 +1,5 @@
+argparse
+phonenumbers
+requests
+bs4
+lxml

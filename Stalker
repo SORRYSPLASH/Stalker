@@ -1,0 +1,172 @@
+#!/usr/bin/env python3
+
+### Imports ###
+import sys
+import argparse
+import phonenumbers
+from phonenumbers import geocoder, carrier, timezone
+import requests as req
+from bs4 import BeautifulSoup
+
+
+### Main Class ###
+class Stalker:
+    def __init__(self) -> None:
+        # Set up the argument parser
+        self.version = "0.0.1"
+        self.parser = argparse.ArgumentParser(description="Stalker Version {} By SS5453".format(self.version), epilog="SS5453 Does not condone the use of this tool for illegal purposes. Use at your own risk.")
+
+        # Add the arguments
+        self.parser.add_argument("--version", action="version", version="Stalker Version {}".format(self.version))
+        self.parser.add_argument("-p", "--phone", metavar="{Phone Number}", help="Phone number to get information on.")
+        self.parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output.")
+        self.parser.add_argument("-u", "--username", nargs=1, metavar="{Social Media Username}", help="Social media username to get information on.")
+
+    def parse(self):
+        self.args = self.parser.parse_args()
+        if not self.args.phone and not self.args.username:
+            self.parser.print_help()
+            sys.exit(1)
+        elif self.args.phone:
+            args = self.args.phone
+            number_type_dict = {
+                0: "UNKNOWN",
+                1: "FIXED_LINE",
+                2: "MOBILE",
+                3: "FIXED_LINE_OR_MOBILE",
+                4: "TOLL_FREE",
+                5: "PREMIUM_RATE",
+                6: "SHARED_COST",
+                7: "VOIP",
+                8: "PERSONAL_NUMBER",
+                9: "PAGER",
+                10: "UAN",
+                11: "VOICEMAIL",
+                -1: "NOT_PARSABLE",
+            }
+            try:
+                if self.args.verbose:
+                    print("[^] Attempting to parse phone number...")
+                number = phonenumbers.parse(args)
+                if self.args.verbose:
+                    print("[^] Phone number parsed successfully: {}".format(number))
+                if not phonenumbers.is_valid_number(number) or not phonenumbers.is_possible_number(number):
+                    if self.args.verbose:
+                        print("[^] Phone number validation failed.")
+                    print("[-] Invalid phone number.")
+                    sys.exit(1)
+            except phonenumbers.phonenumberutil.NumberParseException:
+                if self.args.verbose:
+                    print("[^] Phone number parsing failed.")
+                print("[-] Invalid phone number.")
+                sys.exit(1)
+            if self.args.verbose:
+                print("[^] Phone number validation passed.")
+            number_national = phonenumbers.format_number(number, phonenumbers.PhoneNumberFormat.NATIONAL)
+            number_international = phonenumbers.format_number(number, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
+            number_e164 = phonenumbers.format_number(number, phonenumbers.PhoneNumberFormat.E164)
+            number_rfc3966 = phonenumbers.format_number(number, phonenumbers.PhoneNumberFormat.RFC3966)
+            number_carrier = carrier.name_for_number(number, "en")
+            number_timezone = timezone.time_zones_for_number(number)
+            number_geocoder = geocoder.description_for_number(number, "en")
+            number_type = phonenumbers.number_type(number)
+            print("[!] Getting information on {}...".format(args))
+            print("[+] National: {}".format(number_national))
+            print("[+] International: {}".format(number_international))
+            print("[+] E164: {}".format(number_e164))
+            print("[+] RFC3966: {}".format(number_rfc3966))
+            print("[+] ISP: {}".format(number_carrier))
+            print("[+] Timezone: {}".format(number_timezone))
+            print("[+] GeoLocation: {}".format(number_geocoder))
+            print("[+] Type: {}".format(number_type_dict.get(number_type, "UNKNOWN")))
+            if self.args.verbose:
+                print("[^] Information retrieval completed.")
+            print("[!] Done.")
+        elif self.args.username:
+            args = self.args.username
+            sitedict = {
+                "youtube": {
+                    "url": "https://www.youtube.com/@{}".format(args[0]),
+                    "error": "https://www.youtube.com/noneexistinguserorerror"
+                },
+                "instagram": {
+                    "url": "https://www.instagram.com/{}".format(args[0]),
+                    "error": "https://www.instagram.com/noneexistinguserorerror/"
+                },
+                "roblox": {
+                    "url": "https://www.roblox.com/user.aspx?username={}".format(args[0]),
+                    "error": "https://www.roblox.com/user.aspx?username=noneexistinguserorerror"
+                },
+                "github": {
+                    "url": "https://www.github.com/{}".format(args[0]),
+                    "error": "https://www.github.com/noneexistinguserorerror"
+                },
+                "snapchat": {
+                    "url": "https://www.snapchat.com/add/{}".format(args[0]),
+                    "error": "https://www.snapchat.com/add/noneexistinguserorerror"
+                },
+                "reddit": {
+                    "url": "https://www.reddit.com/user/{}".format(args[0]),
+                    "error": "https://www.reddit.com/user/noneexistinguserorerror"
+                },
+                "soundcloud": {
+                    "url": "https://soundcloud.com/{}".format(args[0]),
+                    "error": "https://soundcloud.com/noneexistinguserorerror"
+                },
+                "twitch": {
+                    "url": "https://www.twitch.tv/{}".format(args[0]),
+                    "error": "https://www.twitch.tv/noneexistinguserorerror"
+                },
+                "tiktok": {
+                    "url": "https://www.tiktok.com/@{}".format(args[0]),
+                    "error": "https://www.tiktok.com/@noneexistinguserorerror"
+                },
+                "spotify": {
+                    "url": "https://open.spotify.com/user/{}".format(args[0]),
+                    "error": "https://open.spotify.com/user/noneexistinguserorerror"
+                },
+                "deviantart": {
+                    "url": "https://www.deviantart.com/{}".format(args[0]),
+                    "error": "https://www.deviantart.com/noneexistinguserorerror"
+                }
+            }
+            
+            print("[!] Getting information on {}".format(args[0]))
+            for site, info in sitedict.items():
+                if self.args.verbose:
+                    print("[^] Attempting to get information on {}...".format(site))
+                user = req.get(info["url"])
+                error = req.get(info["error"])
+                if user.status_code == req.codes.not_found:
+                    if self.args.verbose:
+                        print("[^] User not found on {} Because err status.".format(site))
+                    continue
+                elif user.status_code == req.codes.ok:
+                    UserSource = BeautifulSoup(user.text, "lxml")
+                    ErrorSource = BeautifulSoup(error.text, "lxml")
+                    if UserSource.text == ErrorSource.text:
+                        if self.args.verbose:
+                            print("[^] User not found on {} Because err src.".format(site))
+                        continue
+                    else:
+                        print("[\"{}\"]".format(info["url"]))
+                    
+
+            if self.args.verbose:
+                print("[^] Information retrieval completed.")
+            print("[!] Done.")
+
+        
+
+        
+
+### Main ###
+if __name__ == "__main__":
+    stalker = Stalker()
+    try:
+        stalker.parse()
+    except Exception as e:
+        if stalker.args.verbose:
+            print("[^] {}.". format(e))
+        print("An error occured.\n{}".format(e))
+    sys.exit(0)
