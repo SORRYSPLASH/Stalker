@@ -3,6 +3,17 @@ Stalker represents a sophisticated tool utilized in the realm of Open Source Int
 ![StalkerExampleDark](./images/-hdark.png#gh-dark-mode-only)
 ![StalkerExampleLight](./images/-hlight.png#gh-light-mode-only)
 
+## Features
+* Search Someone By Social Media Username.
+* Get Someone's Information using a Phone Number.
+
+## To-Do
+* Add a Email/Gmail Information Gathering feature.
+* Add More Websites To Search for the Social Media Username Information Gathering part.
+* Try to get more Information on the Phone Number Information Gathering part.
+* Add a self updating system.
+* Organazie the code to be more readable and understandable.
+
 ## Installation
 Firstly, clone the GitHub repository to your local machine.
 ```bash
