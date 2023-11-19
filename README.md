@@ -32,7 +32,7 @@ To Retrieve Information Associated with a Phone Number
 ```bash
 python Stalker -p (Your Phone Number Target Here)
 ```
-To Retrieve Information Associated with a Phone Number
+To Extract Details Pertaining to a Social Media Username
 ```bash
 python Stalker -u (Your Social Media Username Target Here)
 ```
