@@ -1,7 +1,5 @@
 # Stalker
 Stalker represents a sophisticated tool utilized in the realm of Open Source Intelligence (OSINT). Its primary function is to facilitate the gathering of comprehensive information about individuals.
-
-## Example
 ![StalkerExampleDark](./images/-hdark.png#gh-dark-mode-only)
 ![StalkerExampleLight](./images/-hlight.png#gh-light-mode-only)
 
