@@ -45,7 +45,7 @@ We appreciate your interest in contributing to this project! Here are the steps 
 2. **Clone the Repository**: Now, clone this repository to your machine. Click on the 'Code' button and then click the 'copy to clipboard' icon to copy the URL. Open your terminal and enter the following git command:
 
 ```bash
-git clone https://github.com/SORRYSPLASH/Stalker.git
+git clone copied-url-here
 ```
 
 3. **Create a New Branch**: Navigate to the directory of the project on your machine in your terminal and create a new branch using the following command:
