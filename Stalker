@@ -13,7 +13,8 @@ from bs4 import BeautifulSoup
 class Stalker:
     def __init__(self) -> None:
         # Set up the argument parser
-        self.version = "0.0.1"
+        self.version = "0.0.2"
+        self.UpdateURL = "https://raw.githubusercontent.com/SORRYSPLASH/Stalker/main/Stalker"
         self.parser = argparse.ArgumentParser(description="Stalker Version {} By SS5453".format(self.version), epilog="SS5453 Does not condone the use of this tool for illegal purposes. Use at your own risk.")
 
         # Add the arguments
@@ -21,13 +22,25 @@ class Stalker:
         self.parser.add_argument("-p", "--phone", metavar="{Phone Number}", help="Phone number to get information on.")
         self.parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output.")
         self.parser.add_argument("-u", "--username", nargs=1, metavar="{Social Media Username}", help="Social media username to get information on.")
+        self.parser.add_argument("--update", action="store_true", help="Update Stalker to the latest version.")
+
+        try:
+            version = req.get(self.UpdateURL)
+            # Get the contents of this python file
+            with open(sys.argv[0], "r") as f:
+                contents = f.read()
+                f.close()
+            if version.text != contents:
+                print("[!] You are not running the latest version. Consider updating with --update.")
+        except Exception:
+            pass
+
+
+
 
     def parse(self):
         self.args = self.parser.parse_args()
-        if not self.args.phone and not self.args.username:
-            self.parser.print_help()
-            sys.exit(1)
-        elif self.args.phone:
+        if self.args.phone:
             args = self.args.phone
             number_type_dict = {
                 0: "UNKNOWN",
@@ -75,7 +88,7 @@ class Stalker:
             print("[+] International: {}".format(number_international))
             print("[+] E164: {}".format(number_e164))
             print("[+] RFC3966: {}".format(number_rfc3966))
-            print("[+] ISP: {}".format(number_carrier))
+            print("[+] Carrier: {}".format(number_carrier))
             print("[+] Timezone: {}".format(number_timezone))
             print("[+] GeoLocation: {}".format(number_geocoder))
             print("[+] Type: {}".format(number_type_dict.get(number_type, "UNKNOWN")))
@@ -150,15 +163,44 @@ class Stalker:
                         continue
                     else:
                         print("[\"{}\"]".format(info["url"]))
+                    if self.args.verbose:
+                        print("[^] Information retrieval completed.")
+                    print("[!] Done.")
+        elif self.args.update:
+            print("[!] Fetching latest version...")
+            try:
+                version = req.get(self.UpdateURL)
+                # Get the contents of this python file
+                with open(sys.argv[0], "r") as f:
+                    contents = f.read()
+                    f.close()
+                if version.text == contents:
+                    print("[+] You are running the latest version.")
+                    sys.exit(0)
+                else:
+                    print("[!] You are not running the latest version.")
+                    print("[!] Updating...")
+                    with open(sys.argv[0], "w") as f:
+                        f.truncate(0)
+                        f.write(version.text)
+                        f.close()
+                    print("[+] Update completed.")
+                    sys.exit(0)
+            except req.exceptions.ConnectionError:
+                print("[-] Failed to fetch latest version.")
+                if self.args.verbose:
+                    print("[^] Connection error.")
+                sys.exit(1)
+            except FileNotFoundError:
+                print("[-] Failed to fetch latest version.")
+                if self.args.verbose:
+                    print("[^] File not found.")
+                sys.exit(1)
+        else:
+            self.parser.print_help()
+            sys.exit(0)
                     
 
-            if self.args.verbose:
-                print("[^] Information retrieval completed.")
-            print("[!] Done.")
-
-        
-
-        
 
 ### Main ###
 if __name__ == "__main__":
