@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 class Stalker:
     def __init__(self) -> None:
         # Set up the argument parser
-        self.version = "0.0.2"
+        self.version = "0.0.1"
         self.UpdateURL = "https://raw.githubusercontent.com/SORRYSPLASH/Stalker/main/Stalker"
         self.parser = argparse.ArgumentParser(description="Stalker Version {} By SS5453".format(self.version), epilog="SS5453 Does not condone the use of this tool for illegal purposes. Use at your own risk.")
 
@@ -24,6 +24,8 @@ class Stalker:
         self.parser.add_argument("-u", "--username", nargs=1, metavar="{Social Media Username}", help="Social media username to get information on.")
         self.parser.add_argument("--update", action="store_true", help="Update Stalker to the latest version.")
 
+
+    """
         try:
             version = req.get(self.UpdateURL)
             # Get the contents of this python file
@@ -34,8 +36,7 @@ class Stalker:
                 print("[!] You are not running the latest version. Consider updating with --update.")
         except Exception:
             pass
-
-
+    """
 
 
     def parse(self):
@@ -166,6 +167,7 @@ class Stalker:
                     if self.args.verbose:
                         print("[^] Information retrieval completed.")
                     print("[!] Done.")
+"""
         elif self.args.update:
             print("[!] Fetching latest version...")
             try:
@@ -173,6 +175,7 @@ class Stalker:
                 # Get the contents of this python file
                 with open(sys.argv[0], "r") as f:
                     contents = f.read()
+                    print(contents)
                     f.close()
                 if version.text == contents:
                     print("[+] You are running the latest version.")
@@ -199,7 +202,7 @@ class Stalker:
         else:
             self.parser.print_help()
             sys.exit(0)
-                    
+"""       
 
 
 ### Main ###
